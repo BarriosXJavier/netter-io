@@ -1,7 +1,22 @@
+"use client";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { MailIcon, ArrowRight } from "lucide-react";
 
-const HeroForm = () => {
+const HeroForm: React.FC = () => {
+  const [input, setInput] = useState<string>("");
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const email = input;
+    console.log("Email submitted:", input);
+  };
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInput(e.target.value);
+  };
+
   return (
     <div className="mx-auto space-y-6">
       <div className="space-y-2 text-center">
@@ -15,16 +30,26 @@ const HeroForm = () => {
           Get the latest updates and exclusive content delivered to your inbox.
         </p>
       </div>
-      <form className="flex gap-2 w-full">
-        <Input
-          type="email"
-          placeholder="Enter your email"
-          className="flex-1"
-          required
-        />
-        <Button type="submit" className="bg-[#AC58F5]">
-          Subscribe
-        </Button>
+      <form onSubmit={handleSubmit}>
+        <div className="relative flex items-center w-full">
+          <MailIcon
+            className="absolute left-3 text-muted-foreground"
+            size={18}
+          />
+          <Input
+            type="email"
+            placeholder="Email Address"
+            className="w-full bg-[#64748B] text-muted-foreground pl-10 pr-20"
+            required
+            onChange={handleInputChange}
+          />
+          <Button
+            type="submit"
+            className="absolute right-1 bg-[#AC58F5] px-2 py-2"
+          >
+            Submit &nbsp; <ArrowRight className="h-4 w-4" />
+          </Button>
+        </div>
       </form>
     </div>
   );

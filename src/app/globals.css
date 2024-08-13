@@ -67,3 +67,8 @@
         @apply bg-background text-foreground;
     }
 }
+
+input::placeholder {
+    color: black;
+    opacity: 1;
+}
