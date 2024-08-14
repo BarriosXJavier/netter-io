@@ -6,11 +6,30 @@ import { MailIcon, ArrowRight } from "lucide-react";
 
 const HeroForm: React.FC = () => {
   const [input, setInput] = useState<string>("");
+  const [message, setMessage] = useState<string>("");
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const email = input;
-    console.log("Email submitted:", input);
+
+    try {
+      const response = await fetch("/api/addSubscription", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: input }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setMessage("Successfully subscribed!");
+      } else {
+        setMessage(result.error || "Subscription failed.");
+      }
+    } catch (error) {
+      setMessage("An error occurred.");
+    }
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -51,6 +70,7 @@ const HeroForm: React.FC = () => {
           </Button>
         </div>
       </form>
+      {message && <p className="text-center mt-4">{message}</p>}
     </div>
   );
 };
